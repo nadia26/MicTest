@@ -84,6 +84,7 @@ function addLine(item) {
 	var newline = "<tr>";
 	
 	newline += "<td>";
+	newline += "<img src='" + item.image + "' style=height:50px;'>";
 	newline += item.title;
 	newline += "</td>";
 
