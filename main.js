@@ -1,5 +1,5 @@
 var current = new Date();
-var table = document.getElementById("articleTable");
+var table = document.getElementById("tableBody");
 var allArticles = [];
 var numDisplayed = 0;
 
@@ -83,24 +83,23 @@ function displayArticles(numToDisplay) {
 function addLine(item) {
 	var newline = "<tr>";
 	
-	newline += "<td>";
-	newline += "<img src='" + item.image + "' style=height:50px;'>";
-	newline += item.title;
+	newline += "<td class='title'>";
+	newline += "<span><img src='" + item.image + "'></span>"
+	newline += "<p>" + item.title + "</p>";
 	newline += "</td>";
 
-	newline += "<td>";
+	newline += "<td class='author'>";
 	newline += item.profile.first_name;
 	newline += " ";
 	newline += item.profile.last_name;
 	newline += "</td>";
 
-	newline += "<td>";
+	newline += "<td class='words'>";
 	newline += item.words;
 	newline += "</td>";
 
-	newline += "<td>";
+	newline += "<td class='submitted'>";
 	newline += timeAgo(item.submitDate);
-	//console.log(item.publish_at);
 	newline += "</td>";
 
 	newline += "</tr>";

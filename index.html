@@ -1,26 +1,81 @@
-<!doctype html>
-<html>
-<head>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
     <meta charset="utf-8">
-    <title>Demo</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+    span {
+        float:left;
+    }
+    img {
+        padding: 5px;
+        object-fit:cover;
+        width:70px;
+        height:70px;
+    }
+    p {
+        padding: 5px;
+    }
+    thead {
+        background-color:#bf360c;
+        color: white;
+    }
+    #tableBody > tr > td {
+        vertical-align: middle;
+    }
+    .title {
+        color:#0277bd;
+        font-weight: bold;
+
+    }
+    .author {
+        color:#0277bd;
+        text-align: center;
+        font-size: 11px;
+    }
+    .words {
+        text-align: center;
+
+    }
+    .submitted {
+        text-align: center;
+    }
+    #foot {
+        padding-bottom: 15px;
+        text-align: center;
+    }
+
+    </style>
+
+    <title>Unpublished Articles</title>
 
 </head>
 <body>
 
-
-	<table id="articleTable">
-		<tr>
-			<td id="unpublished">UNPUBLISHED ARTICLES</td>
-			<td>AUTHOR</td>
-			<td>WORDS</td>
-			<td>SUBMITTED</td>
-		</tr>
+	<table class="table table-striped table-bordered" id="articleTable">
+        <thead class="thead default" id="theading">
+            <th style="padding:25px;" id="unpublished">UNPUBLISHED ARTICLES</th>
+            <th style="padding:25px;">AUTHOR</th>
+            <th style="padding:25px;">WORDS</th>
+            <th style="padding:25px;">SUBMITTED</th>
+        </tr>
+		<tbody id="tableBody"></tbody>
 	</table>
 
-	<button>Load More</button>
-    <script src="jquery.js"></script>
+    <div id="foot">
+	   <button type="button" class="btn btn-primary btn-lg">Load More</button>
+    </div> 
+
+
+
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
 
     <script type="text/javascript" src="data/articles.json"></script>
-    <script src="scripts/main.js"></script>
+    <script src="main.js"></script>
 </body>
 </html>
