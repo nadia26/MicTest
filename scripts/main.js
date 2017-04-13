@@ -1,27 +1,36 @@
-var unpublished = document.getElementById("unpublished");
+var table = document.getElementById("articleTable");
+var allArticles = [];
+var numDisplayed = 0;
 
 
-var numArticles = 0;
 
-function parseArticles (source, callback) {
-	$.getJSON(source, function(json) {
-		numArticles += json.length;
-		//console.log(numArticles);
-		callback();
-	    $.each(json, function(i, item) {
-	    	addLine(item);
-	    });
-	});
-}
-
-parseArticles("data/articles.json", function() {
-	parseArticles("data/more-articles.json", function() {
+loadArticles("data/articles.json", function() {
+	loadArticles("data/more-articles.json", function() {
 		var unpublished = document.getElementById("unpublished");
-		unpublished.innerHTML += " (" + numArticles + ")";
+		unpublished.innerHTML += " (" + allArticles.length + ")";
+		displayArticles(10);
 	});
 });
 
 
+
+function loadArticles (source, callback) {
+	$.getJSON(source, function(json) {
+	    $.each(json, function(i, item) {
+	    	allArticles.push(item);
+	    });
+	    callback();
+	});
+}
+
+function displayArticles(numToDisplay) {
+	$.each(allArticles, function(i, item) {
+		if (numDisplayed < numToDisplay) {
+			addLine(item);
+			numDisplayed++;
+		}
+	});		
+}
 
 function addLine(item) {
 	var newline = "<tr>";
@@ -46,5 +55,5 @@ function addLine(item) {
 
 	newline += "</tr>";
 
-	document.getElementById("articleTable").innerHTML += newline;
+	table.innerHTML += newline;
 }
