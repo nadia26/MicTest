@@ -2,6 +2,13 @@ var table = document.getElementById("articleTable");
 var allArticles = [];
 var numDisplayed = 0;
 
+$("button").click(function() {
+	displayArticles(numDisplayed + 10);
+	if (numDisplayed >= allArticles.length) {
+		$("button").hide();
+	}
+});
+
 
 
 loadArticles("data/articles.json", function() {
@@ -25,7 +32,7 @@ function loadArticles (source, callback) {
 
 function displayArticles(numToDisplay) {
 	$.each(allArticles, function(i, item) {
-		if (numDisplayed < numToDisplay) {
+		if (numDisplayed <= i && i < numToDisplay) {
 			addLine(item);
 			numDisplayed++;
 		}
