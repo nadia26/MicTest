@@ -1,20 +1,26 @@
 var unpublished = document.getElementById("unpublished");
-unpublished.innerHTML += "()";
 
 
+var numArticles = 0;
 
-$.getJSON("data/articles.json", function(json) {
-    $.each(json, function(i, item) {
-    	addLine(item);
-    });
+function parseArticles (source, callback) {
+	$.getJSON(source, function(json) {
+		numArticles += json.length;
+		//console.log(numArticles);
+		callback();
+	    $.each(json, function(i, item) {
+	    	addLine(item);
+	    });
+	});
+}
+
+parseArticles("data/articles.json", function() {
+	parseArticles("data/more-articles.json", function() {
+		var unpublished = document.getElementById("unpublished");
+		unpublished.innerHTML += " (" + numArticles + ")";
+	});
 });
 
-
-$.getJSON("data/more-articles.json", function(json) {
-    $.each(json, function(i, item) {
-    	addLine(item);
-    });
-});
 
 
 function addLine(item) {
