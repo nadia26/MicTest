@@ -7,13 +7,26 @@ var submitted = $("#submitted");
 var allArticles = [];
 var displayedArticles = [];
 
+console.log(localStorage);
+
 loadArticles("data/articles.json", function() {
 	loadArticles("data/more-articles.json", function() {
 		var unpublished = $("#unpublished");
 		unpublished.append(" (" + allArticles.length + ")");
-		displayArticles(10);
+		if (localStorage.length == 0) {
+			displayArticles(10);
+		} else {
+			displayArticles(localStorage.getItem("displayNum"));
+			var sortType = localStorage.getItem("sort");
+			if (sortType == "words") {
+				wordSort();
+			} else if (sortType == "submitted") {
+				submittedSort();
+			}
+		}
 	});
 });
+
 
 loadmore.click(function() {
 	displayArticles(displayedArticles.length + 10);
@@ -22,19 +35,31 @@ loadmore.click(function() {
 	}
 });
 
-words.click(function() {
+words.click(function () {
+	wordSort();
+});	
+
+
+submitted.click(function() {
+	submittedSort();
+});	
+
+function wordSort() {
+	localStorage.setItem("sort", "words");
 	displayedArticles = displayedArticles.sort(function(a, b) {
 		return a.words - b.words;
 	});
 	reDisplay();
-});	
+}
 
-submitted.click(function() {
+function submittedSort() {
+	localStorage.setItem("sort", "submited");
 	displayedArticles = displayedArticles.sort(function(a, b) {
 		return a.minutesAgo - b.minutesAgo;
 	});
-	reDisplay();
-});	
+	reDisplay();	
+}
+
 
 function reDisplay() {
 	table.html(null);
@@ -62,7 +87,8 @@ function displayArticles(numToDisplay) {
 			addLine(item);
 			displayedArticles.push(item);
 		}
-	});		
+	});	
+	localStorage.setItem("displayNum", displayedArticles.length);	
 }
 
 function submitDate(timestamp) {
