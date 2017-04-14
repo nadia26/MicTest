@@ -1,18 +1,20 @@
-var current = new Date();
 var table = $("#tableBody");
-var loadmore = $("#loadmore");
-var words = $("#words");
-var submitted = $("#submitted");
+var loadmore = $("#loadmore"); //load more button
+var words = $("#words"); //button to sort by word count
+var submitted = $("#submitted"); //button to sort by time-ago
+var current = new Date();
 
-var allArticles = [];
-var displayedArticles = [];
+var allArticles = []; //will store all articles in both json files
+var displayedArticles = []; //stores articles as currently displayed
 
-console.log(localStorage);
 
 loadArticles("data/articles.json", function() {
 	loadArticles("data/more-articles.json", function() {
+		//fill in number of unpublished articles
 		var unpublished = $("#unpublished");
 		unpublished.append(" (" + allArticles.length + ")");
+
+		//check on data stored from previous page visits
 		if (localStorage.length == 0) {
 			displayArticles(10);
 		} else {
@@ -26,49 +28,28 @@ loadArticles("data/articles.json", function() {
 		}
 	});
 });
-
-
+ 
+//on "load more" click, display 10 more articles
 loadmore.click(function() {
 	displayArticles(displayedArticles.length + 10);
 	if (displayedArticles.length >= allArticles.length) {
-		loadmore.hide();
+		loadmore.hide(); //if there are none, hide the button
 	}
 });
 
+//on clicking "words" at top of column
 words.click(function () {
 	wordSort();
 });	
 
-
+//on clicking "submitted" at top of column
 submitted.click(function() {
 	submittedSort();
 });	
 
-function wordSort() {
-	localStorage.setItem("sort", "words");
-	displayedArticles = displayedArticles.sort(function(a, b) {
-		return a.words - b.words;
-	});
-	reDisplay();
-}
 
-function submittedSort() {
-	localStorage.setItem("sort", "submited");
-	displayedArticles = displayedArticles.sort(function(a, b) {
-		return a.minutesAgo - b.minutesAgo;
-	});
-	reDisplay();	
-}
-
-
-function reDisplay() {
-	table.html(null);
-	$.each(displayedArticles, function(i, item) {
-		addLine(item);
-	});
-}	
-
-
+//store data from given source file
+//callback function to ensure that data is loaded before anything starts to display
 function loadArticles (source, callback) {
 	$.getJSON(source, function(json) {
 	    $.each(json, function(i, item) {
@@ -81,6 +62,7 @@ function loadArticles (source, callback) {
 	});
 }
 
+//display more articles such that the total being displayed matches numToDisplay paramter
 function displayArticles(numToDisplay) {
 	$.each(allArticles, function(i, item) {
 		if (displayedArticles.length <= i && i < numToDisplay) {
@@ -91,6 +73,35 @@ function displayArticles(numToDisplay) {
 	localStorage.setItem("displayNum", displayedArticles.length);	
 }
 
+
+//sort articles currently being displayed by word count
+function wordSort() {
+	localStorage.setItem("sort", "words");
+	displayedArticles = displayedArticles.sort(function(a, b) {
+		return a.words - b.words;
+	});
+	reDisplay();
+}
+
+//sort articles currently being displayed by time submitted
+function submittedSort() {
+	localStorage.setItem("sort", "submited");
+	displayedArticles = displayedArticles.sort(function(a, b) {
+		return a.minutesAgo - b.minutesAgo;
+	});
+	reDisplay();	
+}
+
+//sort helper function; repopulate table based on new order
+function reDisplay() {
+	table.html(null);
+	$.each(displayedArticles, function(i, item) {
+		addLine(item);
+	});
+}	
+
+
+//takes a timestamp string, returns a corresponding Date object
 function submitDate(timestamp) {
 	var year = timestamp.substring(0,4);
 	var month = timestamp.substring(5,7) - 1; //months in base 0
@@ -101,12 +112,16 @@ function submitDate(timestamp) {
 	return submitDate;
 }
 
+//returns number of minutes since given date object
+//compared against "current" set on page load
 function minutesAgo(submitDate) {
 	var offset = current.getTime() - submitDate.getTime();
 	var minutesAgo = Math.floor(offset/60000);
 	return minutesAgo;
 }
 
+//given how many minutes ago an article was submitted,
+//returns a string approximation of how long ago that was
 function timeAgo(minutesAgo) {
 	var result;
 	var hoursAgo = Math.floor(minutesAgo/60);
@@ -137,6 +152,7 @@ function timeAgo(minutesAgo) {
 	return result;
 }
 
+//given an item from a json file, adds a line to the displayed table the item's 
 function addLine(item) {
 	var newline = "<tr>";
 	
