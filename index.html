@@ -4,52 +4,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
+    
     <link href="/css/bootstrap.min.css" rel="stylesheet">
 
-    <style>
-    span {
-        float:left;
-    }
-    img {
-        padding: 5px;
-        object-fit:cover;
-        width:70px;
-        height:70px;
-    }
-    p {
-        padding: 5px;
-    }
-    thead {
-        background-color:#bf360c;
-        color: white;
-    }
-    #tableBody > tr > td {
-        vertical-align: middle;
-    }
-    .title {
-        color:#0277bd;
-        font-weight: bold;
-
-    }
-    .author {
-        color:#0277bd;
-        text-align: center;
-        font-size: 11px;
-    }
-    .words {
-        text-align: center;
-
-    }
-    .submitted {
-        text-align: center;
-    }
-    #foot {
-        padding-bottom: 15px;
-        text-align: center;
-    }
-
-    </style>
+    <link href="main.css" rel="stylesheet">
 
     <title>Unpublished Articles</title>
 
@@ -60,14 +18,14 @@
         <thead class="thead default" id="theading">
             <th style="padding:25px;" id="unpublished">UNPUBLISHED ARTICLES</th>
             <th style="padding:25px;">AUTHOR</th>
-            <th style="padding:25px;">WORDS</th>
-            <th style="padding:25px;">SUBMITTED</th>
+            <th style="padding:25px;"><button class="colSort" id="words">WORDS</button></th>
+            <th style="padding:25px;"><button class="colSort" id="submitted">SUBMITTED</th>
         </tr>
 		<tbody id="tableBody"></tbody>
 	</table>
 
     <div id="foot">
-	   <button type="button" class="btn btn-primary btn-lg">Load More</button>
+	   <button type="button" id="loadmore" class="btn btn-primary btn-lg">Load More</button>
     </div> 
 
 

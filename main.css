@@ -1,0 +1,44 @@
+span {
+    float:left;
+}
+img {
+    padding: 5px;
+    object-fit:cover;
+    width:70px;
+    height:70px;
+}
+p {
+    padding: 5px;
+}
+thead {
+    background-color:#bf360c;
+    color: white;
+}
+#tableBody > tr > td {
+    vertical-align: middle;
+}
+.title {
+    color:#0277bd;
+    font-weight: bold;
+
+}
+.author {
+    color:#0277bd;
+    text-align: center;
+    font-size: 11px;
+}
+.words {
+    text-align: center;
+
+}
+.submitted {
+    text-align: center;
+}
+#foot {
+    padding-bottom: 15px;
+    text-align: center;
+}
+.colSort{
+    background:none;
+    border:none;
+}

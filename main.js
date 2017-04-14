@@ -1,32 +1,68 @@
 var current = new Date();
-var table = document.getElementById("tableBody");
-var allArticles = [];
-var numDisplayed = 0;
+var table = $("#tableBody");
+var loadmore = $("#loadmore");
+var words = $("#words");
+var submitted = $("#submitted");
 
-$("button").click(function() {
-	displayArticles(numDisplayed + 10);
-	if (numDisplayed >= allArticles.length) {
-		$("button").hide();
-	}
-});
+var allArticles = [];
+var displayedArticles = [];
 
 loadArticles("data/articles.json", function() {
 	loadArticles("data/more-articles.json", function() {
-		var unpublished = document.getElementById("unpublished");
-		unpublished.innerHTML += " (" + allArticles.length + ")";
+		var unpublished = $("#unpublished");
+		unpublished.append(" (" + allArticles.length + ")");
 		displayArticles(10);
 	});
 });
+
+loadmore.click(function() {
+	displayArticles(displayedArticles.length + 10);
+	if (displayedArticles.length >= allArticles.length) {
+		loadmore.hide();
+	}
+});
+
+words.click(function() {
+	displayedArticles = displayedArticles.sort(function(a, b) {
+		return a.words - b.words;
+	});
+	reDisplay();
+});	
+
+submitted.click(function() {
+	displayedArticles = displayedArticles.sort(function(a, b) {
+		return a.minutesAgo - b.minutesAgo;
+	});
+	reDisplay();
+});	
+
+function reDisplay() {
+	table.html(null);
+	$.each(displayedArticles, function(i, item) {
+		addLine(item);
+	});
+}	
 
 
 function loadArticles (source, callback) {
 	$.getJSON(source, function(json) {
 	    $.each(json, function(i, item) {
 	    	item.submitDate = submitDate(item.publish_at);
+	    	item.minutesAgo = minutesAgo(item.submitDate);
+	    	item.timeAgo = timeAgo(item.minutesAgo);
 	    	allArticles.push(item);
 	    });
 	    callback();
 	});
+}
+
+function displayArticles(numToDisplay) {
+	$.each(allArticles, function(i, item) {
+		if (displayedArticles.length <= i && i < numToDisplay) {
+			addLine(item);
+			displayedArticles.push(item);
+		}
+	});		
 }
 
 function submitDate(timestamp) {
@@ -39,10 +75,14 @@ function submitDate(timestamp) {
 	return submitDate;
 }
 
-function timeAgo(submitDate) {
-	var result;
+function minutesAgo(submitDate) {
 	var offset = current.getTime() - submitDate.getTime();
 	var minutesAgo = Math.floor(offset/60000);
+	return minutesAgo;
+}
+
+function timeAgo(minutesAgo) {
+	var result;
 	var hoursAgo = Math.floor(minutesAgo/60);
 	var daysAgo = Math.floor(hoursAgo/24);
 	var weeksAgo = Math.floor(daysAgo/7);
@@ -71,15 +111,6 @@ function timeAgo(submitDate) {
 	return result;
 }
 
-function displayArticles(numToDisplay) {
-	$.each(allArticles, function(i, item) {
-		if (numDisplayed <= i && i < numToDisplay) {
-			addLine(item);
-			numDisplayed++;
-		}
-	});		
-}
-
 function addLine(item) {
 	var newline = "<tr>";
 	
@@ -99,10 +130,10 @@ function addLine(item) {
 	newline += "</td>";
 
 	newline += "<td class='submitted'>";
-	newline += timeAgo(item.submitDate);
+	newline += item.timeAgo;
 	newline += "</td>";
 
 	newline += "</tr>";
 
-	table.innerHTML += newline;
+	table.append(newline);
 }
